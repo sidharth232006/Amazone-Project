@@ -3,16 +3,13 @@ import {
   removeFromCart,
   updateDeliveryOption,
   calculateCartQuantity,
-  updateQuantity,
+  updateQuantity
 } from "../../data/cart.js";
-import { products, getProduct } from "../../data/products.js";
+import { getProduct } from "../../data/products.js";
 import { formatCurrency } from "../utils/money.js";
 import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js";
-import {
-  deliveryOptions,
-  getDeliveryOption,
-} from "../../data/deliveryOptions.js";
-import { renderPaymentSummary } from "./paymentSummary.js";
+import {deliveryOptions,getDeliveryOption} from "../../data/deliveryOptions.js";
+import { renderPaymentSummary } from "./paymentSummary.js"; 
 
 export function renderOrderSummary() {
   let cartSummaryHTML = "";
@@ -20,8 +17,7 @@ export function renderOrderSummary() {
   cart.forEach((cartItem) => {
     const productId = cartItem.productId;
     const matchingProduct = getProduct(productId);
-    const deliveryOptionId = cartItem.deliveryOptionId;
-    const deliveryOption = getDeliveryOption(deliveryOptionId);
+    const deliveryOption = getDeliveryOption(cartItem.deliveryOptionId);
 
     const today = dayjs();
     const deliveryDate = today.add(deliveryOption.deliveryDays, "days");
@@ -49,9 +45,7 @@ export function renderOrderSummary() {
             <div class="product-quantity
               js-product-quantity-${matchingProduct.id}">
               <span>
-                Quantity: <span class="quantity-label js-quantity-label-${
-                  matchingProduct.id
-                }">
+                Quantity: <span class="quantity-label js-quantity-label-${matchingProduct.id}">
                   ${cartItem.quantity}
                 </span>
               </span>
@@ -59,9 +53,7 @@ export function renderOrderSummary() {
                 data-product-id="${matchingProduct.id}">
                 Update
               </span>
-              <input class="quantity-input js-quantity-input-${
-                matchingProduct.id
-              }"
+              <input class="quantity-input js-quantity-input-${matchingProduct.id}"
                 type="number" min="1" value="${cartItem.quantity}">
               <span class="save-quantity-link link-primary js-save-link"
                 data-product-id="${matchingProduct.id}">
@@ -143,9 +135,10 @@ export function renderOrderSummary() {
 
   function updateCartQuantity() {
     const cartQuantity = calculateCartQuantity();
-    document.querySelector(
-      ".js-return-to-home-link"
-    ).innerHTML = `${cartQuantity} items`;
+    const returnLink = document.querySelector(".js-return-to-home-link");
+    if (returnLink) {
+      returnLink.innerHTML = `${cartQuantity} items`;
+    }
   }
 
   updateCartQuantity();
@@ -173,8 +166,8 @@ export function renderOrderSummary() {
       );
       const newQuantity = Number(quantityInput.value);
 
-      if (newQuantity < 0 || newQuantity >= 1001) {
-        alert("Quantity must be between 0 and 1000");
+      if (newQuantity < 1 || newQuantity > 1000) {
+        alert("Quantity must be between 1 and 1000");
         return;
       }
 
