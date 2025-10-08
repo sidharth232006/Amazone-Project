@@ -3,13 +3,16 @@ import {
   removeFromCart,
   updateDeliveryOption,
   calculateCartQuantity,
-  updateQuantity
+  updateQuantity,
 } from "../../data/cart.js";
 import { getProduct } from "../../data/products.js";
 import { formatCurrency } from "../utils/money.js";
 import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js";
-import {deliveryOptions,getDeliveryOption} from "../../data/deliveryOptions.js";
-import { renderPaymentSummary } from "./paymentSummary.js"; 
+import {
+  deliveryOptions,
+  getDeliveryOption,
+} from "../../data/deliveryOptions.js";
+import { renderPaymentSummary } from "./paymentSummary.js";
 
 export function renderOrderSummary() {
   let cartSummaryHTML = "";
@@ -36,16 +39,18 @@ export function renderOrderSummary() {
             src="${matchingProduct.image}">
 
           <div class="cart-item-details">
-            <div class="product-name">
+            <div class="product-name js-product-name-${matchingProduct.id}">
               ${matchingProduct.name}
             </div>
-            <div class="product-price">
+            <div class="product-price js-product-price-${matchingProduct.id}">
               $${formatCurrency(matchingProduct.priceCents)}
             </div>
             <div class="product-quantity
               js-product-quantity-${matchingProduct.id}">
               <span>
-                Quantity: <span class="quantity-label js-quantity-label-${matchingProduct.id}">
+                Quantity: <span class="quantity-label js-quantity-label-${
+                  matchingProduct.id
+                }">
                   ${cartItem.quantity}
                 </span>
               </span>
@@ -53,7 +58,9 @@ export function renderOrderSummary() {
                 data-product-id="${matchingProduct.id}">
                 Update
               </span>
-              <input class="quantity-input js-quantity-input-${matchingProduct.id}"
+              <input class="quantity-input js-quantity-input-${
+                matchingProduct.id
+              }"
                 type="number" min="1" value="${cartItem.quantity}">
               <span class="save-quantity-link link-primary js-save-link"
                 data-product-id="${matchingProduct.id}">
@@ -94,12 +101,14 @@ export function renderOrderSummary() {
       const isChecked = deliveryOption.id === cartItem.deliveryOptionId;
 
       html += `
-        <div class="delivery-option js-delivery-option"
+        <div class="delivery-option js-delivery-option
+        js-delivery-option-${matchingProduct.id}-${deliveryOption.id}"
           data-product-id="${matchingProduct.id}"
           data-delivery-option-id="${deliveryOption.id}">
           <input type="radio"
             ${isChecked ? "checked" : ""}
-            class="delivery-option-input"
+            class="delivery-option-input
+            js-delivery-option-input-${matchingProduct.id}-${deliveryOption.id}"
             name="delivery-option-${matchingProduct.id}">
           <div>
             <div class="delivery-option-date">
