@@ -1,3 +1,5 @@
+import { formatCurrency } from "../scripts/utils/money.js";
+
 export function getProduct(productId) {
   let matchingProduct;
 
@@ -8,6 +10,30 @@ export function getProduct(productId) {
   });
 
   return matchingProduct;
+}
+
+class Product {
+  id;
+  image;
+  name;
+  rating;
+  priceCents;
+
+  constructor(productDetails) {
+    this.id = productDetails.id;
+    this.image = productDetails.image;
+    this.name = productDetails.name;
+    this.rating = productDetails.rating;
+    this.priceCents = productDetails.priceCents;
+  }
+
+  getStarsUrl() {
+    return `images/products/ratings/rating-${this.rating.stars * 10}.png`;
+  }
+
+  getPrice() {
+    return `$${formatCurrency(this.priceCents)}`;
+  }
 }
 
 export const products = [
@@ -482,6 +508,17 @@ export const products = [
     keywords: ["sweaters", "hoodies", "apparel", "mens"],
   },
   {
+    id: "d9284a1b-8b1e-4c7a-9f5a-4f9d91d9b312",
+    image: "images/products/women-classic-denim-jacket-blue.png",
+    name: "Women's Classic Denim Jacket - Blue",
+    rating: {
+      stars: 5,
+      count: 4289,
+    },
+    priceCents: 3599,
+    keywords: ["jackets", "denim", "apparel", "womens"],
+  },
+  {
     id: "id1",
     image: "images/products/backpack.jpg",
     name: "Black Backpack",
@@ -501,4 +538,6 @@ export const products = [
     },
     priceCents: 2999,
   },
-];
+].map((productDetails) => {
+  return new Product(productDetails);
+});
