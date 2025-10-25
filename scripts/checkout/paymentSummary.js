@@ -108,7 +108,3 @@ export function renderPaymentSummary() {
       window.location.href = 'orders.html';
     });
 }
-
-export function calculateTotalPrice() {
-  return summary.totalBeforeTaxCents + summary.shippingPriceCents + summary.taxCents;
-}
